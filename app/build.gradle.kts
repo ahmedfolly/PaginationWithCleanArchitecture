@@ -47,7 +47,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
     implementation(libs.androidx.paging.runtime.ktx)
 
     implementation (libs.retrofit)
@@ -59,6 +58,11 @@ dependencies {
     implementation (libs.logging.interceptor)
     implementation (libs.glide)
     ksp (libs.compiler)
+
+    //room
+    implementation (libs.androidx.room.ktx)
+    ksp (libs.androidx.room.compiler)
+
 
 
 }
