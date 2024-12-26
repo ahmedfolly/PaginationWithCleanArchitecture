@@ -12,6 +12,8 @@ Single Screen UI: Displays a list of movies using a RecyclerView.
 
 Paging 3 Integration: Efficiently loads data in chunks to optimize performance and user experience.
 
+Room: To implement cache 
+
 Clean Architecture: Structured with clear layers: Data, Domain, and Presentation.
 
 Hilt for Dependency Injection: Simplifies dependency management across layers.
@@ -58,6 +60,8 @@ Integrates ViewModel (MVVM) for managing UI-related data and lifecycle-aware com
 #### 6-Kotlin Coroutines: For asynchronous operations.
 
 #### 7-RecyclerView: For displaying the paginated list of movies.
+
+#### 8-Room: For caching data.
 
 # Screenshots
 Here is demo gif to display the Pagination(note that progress bar appears in short time cause the internet speed)
