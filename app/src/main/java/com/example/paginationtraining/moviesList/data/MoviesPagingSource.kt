@@ -4,47 +4,37 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.paginationtraining.moviesList.data.local.MoviesDao
-import com.example.paginationtraining.moviesList.domain.Movie
+import com.example.paginationtraining.moviesList.data.model.toMovies
+import com.example.paginationtraining.moviesList.domain.MovieDomain
 
 class MoviesPagingSource(private val apiService: APIService, private val dao: MoviesDao) :
-    PagingSource<Int, Movie>() {
-    private var isCachedDataLoaded = false
-    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
+    PagingSource<Int, MovieDomain>() {
+    override fun getRefreshKey(state: PagingState<Int, MovieDomain>): Int? {
         return state.anchorPosition?.let {
             state.closestPageToPosition(it)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieDomain> {
         val page = params.key ?: 1
-        Log.d("TAG", "Requesting page: $page")
         return try {
             val response = apiService.getMovies(page = page)
-            Log.d("TAG", "load: ${response.page}")
-            dao.insertAll(response.results)
+            val remoteMovies = response.results
+            val movies = remoteMovies.toMovies()
+            dao.insertAll(movies)
             LoadResult.Page(
-                data = response.results,
+                data = movies,
                 prevKey = if (page == 1) null else page - 1,
                 nextKey = if (response.results.isEmpty()) null else page + 1
             )
-        } catch (e: Exception) {
-            Log.d("TAG", "load: ${e.message}")
-            if (!isCachedDataLoaded) {
+        } catch (_: Exception) {
                 val localData = dao.readMovies()
-                for (movie in localData) {
-                    Log.d("TAG", "load: movie name is :- ${movie.title}")
-                }
-                isCachedDataLoaded = true
                 LoadResult.Page(
                     data = localData,
-                    prevKey = if (page == 1) null else page - 1,
-                    nextKey = if (localData.isEmpty()) null else page + 1
+                    prevKey = null,
+                    nextKey = null
                 )
-            } else {
-                LoadResult.Error(Throwable())
-            }
-
         }
     }
 }

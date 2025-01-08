@@ -1,22 +1,22 @@
 package com.example.paginationtraining.moviesList.data.local
 
 import androidx.room.TypeConverter
-import com.example.paginationtraining.moviesList.domain.Movie
+import com.example.paginationtraining.moviesList.domain.MovieDomain
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class AppTypeConverter {
     //convert list of movies
     @TypeConverter
-    fun fromList(movies: List<Movie>?): String? {
+    fun fromList(movies: List<MovieDomain>?): String? {
         return movies?.let { Gson().toJson(it) }
     }
 
     @TypeConverter
-    fun toList(data: String?): List<Movie>? {
+    fun toList(data: String?): List<MovieDomain>? {
         return data?.let {
-            val type = object : TypeToken<List<Movie>>() {}.type
-            Gson().fromJson<List<Movie>>(it, type)
+            val type = object : TypeToken<List<MovieDomain>>() {}.type
+            Gson().fromJson<List<MovieDomain>>(it, type)
         }
     }
 

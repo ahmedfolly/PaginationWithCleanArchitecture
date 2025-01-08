@@ -4,5 +4,5 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 
 interface GetMoviesRepo {
-     fun getMovies(): Flow<PagingData<Movie>>
+     fun getMovies(): Flow<PagingData<MovieDomain>>
 }
